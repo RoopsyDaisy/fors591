@@ -68,27 +68,56 @@ def check_gdal():
     """Check GDAL and geospatial libraries."""
     print("\n🌍 GEOSPATIAL (GDAL)")
 
+    import subprocess
+
+    # Check system GDAL installation
+    system_gdal_ok = False
+    try:
+        result = subprocess.run(
+            ["gdal-config", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if result.returncode == 0:
+            version = result.stdout.strip()
+            print(f"   ✅ System GDAL: {version}")
+            system_gdal_ok = True
+        else:
+            print("   ❌ System GDAL not available (check Dockerfile)")
+    except FileNotFoundError:
+        print("   ❌ System GDAL not installed (gdal-config not found)")
+    except subprocess.TimeoutExpired:
+        print("   ⚠️  System GDAL check timed out")
+
+    # Check Python GDAL bindings (rarely needed directly)
     try:
         from osgeo import gdal
-        print(f"   ✅ GDAL version: {gdal.__version__}")
-        gdal_ok = True
+
+        print(f"   ✅ Python GDAL bindings: {gdal.__version__}")
     except ImportError:
-        print("   ❌ GDAL not available (check Dockerfile)")
-        gdal_ok = False
+        pass  # Not worth mentioning - rasterio/geopandas are the typical interface
 
     # Optional Python geospatial packages
-    for pkg, install_hint in [
-        ("rasterio", "uv sync --extra geo"),
-        ("geopandas", "uv sync --extra geo"),
-        ("shapely", "uv sync --extra geo"),
-    ]:
+    geo_packages = ["rasterio", "geopandas", "shapely"]
+    geo_installed = []
+    geo_missing = []
+
+    for pkg in geo_packages:
         try:
             m = __import__(pkg)
-            print(f"   ✅ {pkg}: {m.__version__}")
+            geo_installed.append((pkg, getattr(m, "__version__", "installed")))
         except ImportError:
-            print(f"   ⚠️  {pkg} not installed (optional: {install_hint})")
+            geo_missing.append(pkg)
 
-    return gdal_ok
+    for pkg, version in geo_installed:
+        print(f"   ✅ {pkg}: {version}")
+
+    if geo_missing:
+        print(f"   ⚠️  {', '.join(geo_missing)} not installed")
+        print("      → To install: uv sync --extra dev --extra geo")
+
+    return system_gdal_ok
 
 
 def check_packages():
@@ -149,8 +178,9 @@ def check_data_mounts():
 
     # Common mount points - customize for your lab
     mount_points = [
+        Path("/run/media"),
+        Path("/run/data_raid5"),
         Path("/data"),
-        Path("/fire_analysis_data"),
         Path.home() / "data",
     ]
 
@@ -202,6 +232,8 @@ def main():
     print()
     if critical_ok:
         print("✅ ALL CRITICAL CHECKS PASSED - Environment ready!")
+        print()
+        print("💡 TIP: Open 'default.code-workspace' to see data mounts in explorer")
         print()
         print("Next steps:")
         print("  1. Start exploring in notebooks/")

@@ -15,7 +15,7 @@
     "source=/run/media,target=/run/media,type=bind,consistency=cached",
     "source=/run/data_raid5,target=/run/data_raid5,type=bind,consistency=cached"
   ],
-  "postCreateCommand": "uv sync --extra dev && uv run python scripts/check_env.py",
+  "postCreateCommand": "uv sync --extra dev && Rscript -e \"renv::restore()\" && uv run python scripts/check_env.py && (Rscript scripts/check_r_env.R || echo 'R check had warnings - see above')",
   "postStartCommand": "uv sync --extra dev --quiet",
   "customizations": {
     "vscode": {
@@ -41,6 +41,12 @@
           "editor.rulers": [
             88
           ]
+        },
+        // R settings
+        "r.bracketedPaste": true,
+        "r.plot.useHttpgd": true,
+        "[r]": {
+          "editor.defaultFormatter": "REditorSupport.r"
         }
       },
       "extensions": [
@@ -57,7 +63,9 @@
         "redhat.vscode-yaml",
         "tamasfe.even-better-toml",
         // Git
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        // R language support
+        "REditorSupport.r"
       ]
     }
   }

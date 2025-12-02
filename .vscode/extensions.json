@@ -7,7 +7,6 @@
     "ms-toolsai.jupyter",
     "mechatroner.rainbow-csv",
     "redhat.vscode-yaml",
-    "tamasfe.even-better-toml",
-    "eamodio.gitlens"
+    "tamasfe.even-better-toml"
   ]
 }

@@ -8,6 +8,11 @@ __pycache__/
 venv/
 ENV/
 
+# R renv library (like .venv for R)
+renv/library/
+renv/staging/
+renv/local/
+
 # Distribution / packaging
 dist/
 build/

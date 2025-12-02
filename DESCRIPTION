@@ -1,0 +1,6 @@
+Type: project
+Title: FORS591 Forest Analysis
+Description: Forest vegetation simulation and analysis tools
+Depends:
+    readxl,
+    RSQLite

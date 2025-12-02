@@ -92,7 +92,7 @@ def check_gdal():
 
     # Check Python GDAL bindings (rarely needed directly)
     try:
-        from osgeo import gdal
+        from osgeo import gdal  # type: ignore
 
         print(f"   ✅ Python GDAL bindings: {gdal.__version__}")
     except ImportError:

@@ -2,6 +2,10 @@ FROM docker.io/nvidia/cuda:13.0.1-cudnn-runtime-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Set locale to avoid R warnings
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
 # -----------------------------------------------------------------------------
 # Base system packages + GDAL/PROJ for geospatial support
 # -----------------------------------------------------------------------------
@@ -18,6 +22,31 @@ RUN apt-get update && \
         # Node.js for MCP servers (npx)
         nodejs npm \
         && rm -rf /var/lib/apt/lists/*
+
+# -----------------------------------------------------------------------------
+# R and dependencies for FVS integration
+# -----------------------------------------------------------------------------
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        # R base and development
+        r-base r-base-dev \
+        # Fortran compiler (needed for FVS and some R packages)
+        gfortran \
+        # Libraries for common R packages
+        libcurl4-openssl-dev libssl-dev libxml2-dev \
+        libfontconfig1-dev libharfbuzz-dev libfribidi-dev \
+        libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev \
+        && rm -rf /var/lib/apt/lists/*
+
+# Install R languageserver for VS Code integration
+# Also install httpgd (plot viewer), RSQLite (for FVS database output), and renv (package management)
+RUN R -e "install.packages(c('languageserver', 'httpgd', 'RSQLite', 'renv'), repos='https://cloud.r-project.org')"
+
+# -----------------------------------------------------------------------------
+# Environment variables for FVS libraries
+# -----------------------------------------------------------------------------
+ENV FVS_LIB_DIR=/workspaces/fors591/lib/fvs/FVSie_CmakeDir
+ENV LD_LIBRARY_PATH=${FVS_LIB_DIR}:${LD_LIBRARY_PATH}
 
 # -----------------------------------------------------------------------------
 # Install uv package manager

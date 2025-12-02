@@ -44,6 +44,9 @@ outputs/
 *.log
 wandb/
 
+# Fortran unit files (from FVS)
+fort.*
+
 # OS
 .DS_Store
 Thumbs.db

@@ -2,6 +2,7 @@
 name: Implementer
 description: Execute accepted plans and write code.
 target: vscode
+model: Claude Sonnet 4.5
 handoffs:
   - label: Request QA Review
     agent: QA

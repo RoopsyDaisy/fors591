@@ -31,6 +31,17 @@
                 "-y",
                 "@upstash/context7-mcp@latest"
             ]
+        },
+        "sqlite": {
+            "type": "stdio",
+            "command": "uv",
+            "args": [
+                "tool",
+                "run",
+                "mcp-server-sqlite",
+                "--db-path",
+                "/workspaces/fors591/outputs/assignment5/harv1/FVSOut.db"
+            ]
         }
     }
 }

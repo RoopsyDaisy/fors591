@@ -2,6 +2,7 @@
 name: Architect
 description: Plan multi-step changes without editing code.
 target: vscode
+model: Claude Opus 4.5 (Preview)
 handoffs:
   - label: Start Implementation
     agent: Implementer

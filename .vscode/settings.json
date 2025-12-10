@@ -1,3 +1,5 @@
 {
-    "chat.mcp.access": "registry"
+    "chat.mcp.access": "registry",
+    "jupyter.runStartupCommands": [],
+    "notebook.output.scrolling": true
 }

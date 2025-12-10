@@ -3,14 +3,14 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "project-name"  # <-- CUSTOMIZE
+name = "project-name" # <-- CUSTOMIZE
 version = "0.1.0"
-description = "A new Python ML project"  # <-- CUSTOMIZE
+description = "A new Python ML project" # <-- CUSTOMIZE
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [
-    { name = "Your Name", email = "you@example.com" }  # <-- CUSTOMIZE
+    { name = "Your Name", email = "you@example.com" }, # <-- CUSTOMIZE
 ]
 keywords = ["machine-learning", "data-science"]
 
@@ -20,21 +20,19 @@ dependencies = [
     "torchvision>=0.15.0",
     "numpy>=1.24.0",
     "scipy>=1.10.0",
-
     # Data processing
     "pandas>=2.0.0",
     "polars>=0.20.0",
-
     # Visualization
     "matplotlib>=3.7.0",
     "seaborn>=0.12.0",
-
     # Notebooks
     "jupyter>=1.0.0",
     "ipykernel>=6.20.0",
-
     # Progress bars
     "tqdm>=4.65.0",
+    "openpyxl>=3.1.5",
+    "pymupdf>=1.26.6",
 ]
 
 [project.optional-dependencies]
@@ -52,11 +50,11 @@ geo = [
     "shapely>=2.0.0",
 ]
 all = [
-    "project-name[dev,geo]",  # <-- MATCH project.name
+    "project-name[dev,geo]", # <-- MATCH project.name
 ]
 
 [project.urls]
-Repository = "https://github.com/org/project-name"  # <-- CUSTOMIZE
+Repository = "https://github.com/org/project-name" # <-- CUSTOMIZE
 
 # -----------------------------------------------------------------------------
 # Tool configuration
@@ -67,7 +65,7 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
-ignore = ["E501"]  # line length handled by formatter
+ignore = ["E501"]                          # line length handled by formatter
 
 [tool.black]
 line-length = 88
@@ -76,6 +74,9 @@ target-version = ["py311"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+markers = [
+    "integration: marks tests as integration tests (slow, run actual FVS)",
+]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/project_name"]  # <-- CUSTOMIZE
+packages = ["src/fvs_tools"]
